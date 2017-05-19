@@ -23,14 +23,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+
 /**
  * 
- *博客地址: http://blog.csdn.net/xiaohao0724/article/details/68488226
+ * 博客地址: http://blog.csdn.net/xiaohao0724/article/details/68488226
  */
 public class VideoRecordActivity extends Activity implements OnClickListener, SurfaceHolder.Callback {
 	private static final String TAG = "Havorld";
-	//路径/storage/emulated/0/Movies/
-	private String savePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + File.separator;
+	// 路径/storage/emulated/0/Movies/
+	private String savePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+			+ File.separator;
 	private String path;
 	private MediaRecorder mediaRecorder;// 录制视频的类
 	private SurfaceView surfaceview;// 显示视频的控件
@@ -46,6 +48,10 @@ public class VideoRecordActivity extends Activity implements OnClickListener, Su
 		// 选择支持半透明模式,在有surfaceview的activity中使用。
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		setContentView(R.layout.activity_video_record);
+		Log.e(TAG, "总高度:" + ScreenUtil.getDpi(this));
+		Log.e(TAG, "底部虚拟键高度:" + ScreenUtil.getBottomStatusHeight(this));
+		Log.e(TAG, "屏幕高度:" + ScreenUtil.getScreenHeight(this));
+
 		initView();
 	}
 
@@ -92,10 +98,10 @@ public class VideoRecordActivity extends Activity implements OnClickListener, Su
 			if (path == null || path == "")
 				return;
 			File file = new File(path);
-			 if (file.exists()) {
-				 file.delete();
+			if (file.exists()) {
+				file.delete();
 			}
-			 file = null;
+			file = null;
 			break;
 		default:
 			break;
@@ -128,7 +134,7 @@ public class VideoRecordActivity extends Activity implements OnClickListener, Su
 		// 获取支持的预览尺寸
 		List<Size> sizes = parameters.getSupportedPreviewSizes();
 		for (int i = 0; i < sizes.size(); i++) {
-//			 Log.e(TAG,"width:"+sizes.get(i).width+"---"+"height:"+sizes.get(i).height);
+			// Log.e(TAG,"width:"+sizes.get(i).width+"---"+"height:"+sizes.get(i).height);
 		}
 
 		Camera.Size csize = camera.getParameters().getPreviewSize();
@@ -136,7 +142,7 @@ public class VideoRecordActivity extends Activity implements OnClickListener, Su
 		Size previewSize = PreviewSizeutil.getInstance().getCameraPreviewSize(parameters.getSupportedPreviewSizes(),
 				ScreenUtil.getScreenHeight(this));
 		Log.e(TAG, previewSize.width + "===" + previewSize.height);
-		
+
 		parameters.setPreviewSize(previewSize.width, previewSize.height);
 
 		// 获取对焦模式
@@ -209,14 +215,14 @@ public class VideoRecordActivity extends Activity implements OnClickListener, Su
 		mediaRecorder.setMaxDuration(10000);
 		// 设置使用SurfaceView来显示视频预览
 		mediaRecorder.setPreviewDisplay(surfaceHolder.getSurface());
-		
-		File file = new File(savePath);  
-        if (!file.exists()) {  
-            //多级文件夹的创建  
-            file.mkdirs();  
-        }  
-        file = null;
-        path = savePath+"XiuMF_" + System.currentTimeMillis() + ".mp4";
+
+		File file = new File(savePath);
+		if (!file.exists()) {
+			// 多级文件夹的创建
+			file.mkdirs();
+		}
+		file = null;
+		path = savePath + "XiuMF_" + System.currentTimeMillis() + ".mp4";
 		// 设置视频输出路径
 		mediaRecorder.setOutputFile(path);
 		try {
@@ -255,8 +261,8 @@ public class VideoRecordActivity extends Activity implements OnClickListener, Su
 				camera.setPreviewDisplay(null);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}finally{
-				
+			} finally {
+
 				camera.setPreviewCallback(null);
 				camera.stopPreview();
 				camera.lock();
@@ -299,8 +305,5 @@ public class VideoRecordActivity extends Activity implements OnClickListener, Su
 		surfaceview = null;
 		surfaceHolder = null;
 	}
-	
-	
 
-	
 }
